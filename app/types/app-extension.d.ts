@@ -80,7 +80,6 @@ export interface InstallAPI {
   render: (templatePath: string, scope?: object) => void,
   renderFile: (relativeSourcePath: string, relativeTargetPath: string, scope?: object) => void,
   onExitLog: (msg: string) => void
-  }
 }
 
 export interface UninstallAPI {
