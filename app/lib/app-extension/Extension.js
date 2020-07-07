@@ -302,10 +302,20 @@ module.exports = class Extension {
   }
 
   __getScript (scriptName, fatalError) {
-    let script
-
+    let script, src
+    const pkg = require.resolve(this.packageName + `/package.json`, {
+      paths: [ appPaths.appDir ]
+    })
+    src = require(pkg).main.split('/')[0]
+    console.log(src)
     try {
-      script = require.resolve(this.packageName + '/src/' + scriptName, {
+
+    }
+    catch (e) {
+
+    }
+    try {
+      script = require.resolve(this.packageName + `/${src}/` + scriptName, {
         paths: [ appPaths.appDir ]
       })
     }

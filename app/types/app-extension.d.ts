@@ -1,4 +1,4 @@
-// import { IResolve } from './app-paths'
+import { IResolve } from './app-paths'
 // import { QuasarConf } from './configuration/conf'
 
 // type TCommand = (args: Array<string>, param: Record<string, unknown>) => Promise<void>
@@ -28,11 +28,11 @@
 // }
 
 export interface IndexAPI {
-  // ctx: Record<string, unknown>
-  // extId: string
-  // prompts: Record<string, unknown>
-  // resolve: IResolve,
-  // appDir: string,
+  ctx: Record<string, unknown>
+  extId: string
+  prompts: Record<string, unknown>
+  resolve: IResolve,
+  appDir: string,
   // __hooks: IndexAPIHooks,
   getPersistentConf: () => Record<string, unknown>,
   setPersistentConf: (cfg: Record<string, unknown>) => void,
@@ -58,10 +58,10 @@ export interface IndexAPI {
 }
 
 export interface InstallAPI {
-  // extId: string
-  // prompts: Record<string, unknown>
-  // resolve: IResolve,
-  // appDir: string,
+  extId: string
+  prompts: Record<string, unknown>
+  resolve: IResolve,
+  appDir: string,
   // __needsNodeModulesUpdate: boolean,
   // __hooks: {
   //   renderFolders: Array<(args: { source: string, rawCopy: boolean, scope: Record<string, unknown> }) => void>,
@@ -83,10 +83,10 @@ export interface InstallAPI {
 }
 
 export interface UninstallAPI {
-  // extId: string
-  // prompts: Record<string, unknown>
-  // resolve: IResolve,
-  // appDir: string,
+  extId: string
+  prompts: Record<string, unknown>
+  resolve: IResolve,
+  appDir: string,
   // __hooks: {
   //   exitLog: Array<string>
   // },
