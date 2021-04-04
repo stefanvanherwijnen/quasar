@@ -36,6 +36,9 @@ export default Vue.extend({
     },
     textColor: String,
 
+    activeColor: String,
+    activeTextColor: String,
+
     inputStyle: [Array, String, Object],
     inputClass: [Array, String, Object],
 
@@ -77,6 +80,21 @@ export default Vue.extend({
     ripple: {
       type: [Boolean, Object],
       default: null
+    },
+
+    round: Boolean,
+    rounded: Boolean,
+
+    flat: Boolean,
+    outline: Boolean,
+    unelevated: Boolean,
+    push: Boolean,
+    glossy: Boolean,
+
+    dense: Boolean,
+    padding: {
+      type: String,
+      default: '3px 2px'
     }
   },
 
@@ -144,19 +162,38 @@ export default Vue.extend({
     attrs () {
       if (this.disable === true) {
         return {
-          'aria-disabled': ''
+          'aria-disabled': 'true'
         }
       }
     },
 
     btnProps () {
       return {
+        round: this.round,
+        rounded: this.rounded,
+
+        outline: this.outline,
+        unelevated: this.unelevated,
+        push: this.push,
+        glossy: this.glossy,
+
+        dense: this.dense,
+        padding: this.padding,
+
         color: this.color,
         flat: true,
         size: this.size,
         ripple: this.ripple !== null
           ? this.ripple
           : true
+      }
+    },
+
+    activeBtnProps () {
+      return {
+        flat: this.flat,
+        color: this.activeColor || this.color,
+        textColor: this.activeTextColor || this.textColor
       }
     }
   },
@@ -346,16 +383,20 @@ export default Vue.extend({
         }, pgTo + 1))
       }
       for (let i = pgFrom; i <= pgTo; i++) {
-        const active = i === this.value
+        const btn = {
+          disable: this.disable,
+          flat: true,
+          label: i
+        }
+
+        if (i === this.value) {
+          Object.assign(btn, this.activeBtnProps)
+        }
+
         contentMiddle.push(this.__getBtn(h, {
           key: `bpg${i}`,
           style
-        }, {
-          disable: this.disable,
-          flat: !active,
-          textColor: active ? this.textColor : null,
-          label: i
-        }, i))
+        }, btn, i))
       }
     }
 

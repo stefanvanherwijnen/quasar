@@ -40,7 +40,7 @@ import { Cookies } from 'quasar'
 var value = Cookies.get('cookie_name')
 ```
 
-When cookie is not set, the return value is `undefined`.
+When cookie is not set, the return value is `null`.
 
 ```js
 // inside of a Vue file
@@ -156,6 +156,8 @@ SameSite cookies let servers require that a cookie shouldn't be sent with cross-
 
 **Lax** - If the attribute is set to Lax, same-site cookies are withheld on cross-site subrequests, such as calls to load images or frames, but will be sent when a user navigates to the URL from an external site, for example, by following a link.
 
+For more information on the `same-site` setting, go [here](https://web.dev/samesite-cookies-explained/).
+
 ### Option: httpOnly
 
 ``` js
@@ -173,7 +175,7 @@ secure: true
 If true, the cookie transmission requires a secure protocol (HTTPS) and will NOT be sent over HTTP. Default value is `false`.
 
 ::: tip
-If using Quasar CLI and [on dev mode](/quasar-cli/quasar-conf-js#Property%3A-devServer), you can enable HTTPS through quasar.conf.js > devServer > https: true.
+If using Quasar CLI and [on dev mode](/quasar-cli/quasar-conf-js#property-devserver), you can enable HTTPS through quasar.conf.js > devServer > https: true.
 :::
 
 ### Option: other

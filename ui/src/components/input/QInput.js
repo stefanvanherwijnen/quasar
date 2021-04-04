@@ -184,7 +184,7 @@ export default Vue.extend({
     },
 
     __onInput (e) {
-      if (e && e.target && e.target.composing === true) {
+      if (!e || !e.target || e.target.composing === true) {
         return
       }
 
@@ -200,6 +200,16 @@ export default Vue.extend({
       }
       else {
         this.__emitValue(val)
+
+        if (['text', 'search', 'url', 'tel', 'password'].includes(this.type) && e.target === document.activeElement) {
+          const index = e.target.selectionEnd
+
+          index !== void 0 && this.$nextTick(() => {
+            if (e.target === document.activeElement && val.indexOf(e.target.value) === 0) {
+              e.target.setSelectionRange(index, index)
+            }
+          })
+        }
       }
 
       // we need to trigger it immediately too,
@@ -216,9 +226,15 @@ export default Vue.extend({
           delete this.tempValue
         }
 
-        if (this.value !== val) {
+        if (this.value !== val && this.emitCachedValue !== val) {
+          this.emitCachedValue = val
+
           stopWatcher === true && (this.stopValueWatcher = true)
           this.$emit('input', val)
+
+          this.$nextTick(() => {
+            this.emitCachedValue === val && (this.emitCachedValue = NaN)
+          })
         }
 
         this.emitValueFn = void 0
@@ -274,7 +290,9 @@ export default Vue.extend({
       this.stopValueWatcher = false
       delete this.tempValue
 
-      this.type !== 'file' && this.$nextTick(() => {
+      // we need to use setTimeout instead of this.$nextTick
+      // to avoid a bug where focusout is not emitted for type date/time/week/...
+      this.type !== 'file' && setTimeout(() => {
         if (this.$refs.input !== void 0) {
           this.$refs.input.value = this.innerValue !== void 0 ? this.innerValue : ''
         }
@@ -289,7 +307,8 @@ export default Vue.extend({
 
     __getShadowControl (h) {
       return h('div', {
-        staticClass: 'q-field__native q-field__shadow absolute-full no-pointer-events'
+        staticClass: 'q-field__native q-field__shadow absolute-bottom no-pointer-events' +
+          (this.isTextarea === true ? '' : ' text-no-wrap')
       }, [
         h('span', { staticClass: 'invisible' }, this.__getCurValue()),
         h('span', this.shadowText)
@@ -309,6 +328,10 @@ export default Vue.extend({
           : this.formDomProps
       })
     }
+  },
+
+  created () {
+    this.emitCachedValue = NaN
   },
 
   mounted () {
