@@ -25,6 +25,7 @@
   },
   "devDependencies": {
     "@quasar/app-vite": "^2.0.0",
+    "animated-unocss": "^0.0.6",
     "autoprefixer": "^10.4.20",
     "axios": "^1.7.7",
     "eslint": "^8.57.1",
@@ -37,7 +38,9 @@
     "markdown-it-container": "^4.0.0",
     "tinyglobby": "^0.2.10",
     "toml": "^3.0.0",
+    "unocss": "^65.4.2",
     "vite-plugin-checker": "^0.7.2",
+    "vitrify": "^0.17.9",
     "workbox-build": "^7.1.1"
   }
 }

@@ -4,6 +4,8 @@ import { fileURLToPath } from 'node:url'
 import mdPlugin from './build/md/index.js'
 import examplesPlugin from './build/examples.js'
 import manualChunks from './build/chunks.js'
+import UnoCSS from 'unocss/vite'
+import { QuasarPreset } from 'vitrify'
 
 export default defineConfig(ctx => ({
   boot: [
@@ -41,10 +43,46 @@ export default defineConfig(ctx => ({
         eslint: {
           lintCommand: 'eslint --report-unused-disable-directives "./**/*.{js,mjs,cjs,vue}"'
         }
-      }, { server: false } ]
+      }, { server: false } ],
+      {
+        name: 'quasar-strip-sass',
+        enforce: 'pre',
+        // Insert hackerman meme
+        transform (code, id) {
+          if (code.includes`import 'quasar/dist/quasar.sass'`) {
+            code = code.replaceAll('import \'quasar/dist/quasar.sass\'', 'import \'virtual:uno.css\'')
+          }
+
+          return code
+        }
+      }
     ],
 
     extendViteConf (viteConf, { isClient }) {
+      viteConf.plugins.push(UnoCSS({
+        enforce: 'pre',
+        presets: [
+          QuasarPreset({
+            plugins: [
+              'AddressbarColor',
+              'AppFullscreen',
+              'AppVisibility',
+              'BottomSheet',
+              'Cookies',
+              'Dark',
+              'Dialog',
+              'Loading',
+              'LoadingBar',
+              'LocalStorage',
+              'Meta',
+              'Notify',
+              'Platform',
+              'Screen',
+              'SessionStorage'
+            ]
+          })
+        ]
+      }))
       if (ctx.prod && isClient) {
         viteConf.build.chunkSizeWarningLimit = 650
         viteConf.build.rollupOptions = {
